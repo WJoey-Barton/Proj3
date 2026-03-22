@@ -2,6 +2,8 @@ import java.awt.Color;
 
 public class Car {
 
+    public static final double BASE_SPEED = 5.0;
+
     private final Engine engine;
     private final Tire tire;
     private final Aero aero;
