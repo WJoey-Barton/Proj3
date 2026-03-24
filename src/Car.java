@@ -1,8 +1,9 @@
-import java.awt.Color;
+import javafx.scene.paint.Color;
 
 public class Car {
 
     public static final double BASE_SPEED = 5.0;
+    private double totalSpeed = 0;
 
     private final Engine engine;
     private final Tire tire;
@@ -20,13 +21,24 @@ public class Car {
     private boolean isPlayerCar;
     private boolean isFinished;
 
-    public Car(Engine engine, Tire tire, Aero aero, int carNumber, Color color, Driver driver) {
+    public Car(Engine engine, Tire tire, Aero aero, Color color, Driver driver) {
         this.engine = engine;
         this.tire = tire;
         this.aero = aero;
-        this.carNumber = carNumber;
         this.color = color;
         this.driver = driver;
+        carNumber = driver.getCarNumber();
+        calculateCarSpeed();
+    }
+
+    /*
+    This method takes the Engine, Tire, and Aero rating and finds the average and adds it to the BASE_SPEED.
+    It also finds the highest rating of the three, multiplies it by 0.5, and adds that to the totalSpeed.
+    This will reward a car that has a high, single attribute.
+    */
+    private void calculateCarSpeed() {
+        totalSpeed = BASE_SPEED + ((engine.getRating() + tire.getRating() + aero.getRating()) / 3) + 
+        (0.5 * Math.max(engine.getRating(), Math.max(tire.getRating(), aero.getRating())));
     }
 
     //Getters
@@ -41,6 +53,11 @@ public class Car {
     public double getCurrentSpeed() { return this.currentSpeed;}
     public boolean isPlayerCar() { return this.isPlayerCar;}
     public boolean isFinished() { return this.isFinished;}
+
+    @Override
+    public String toString() {
+        return "Total Speed: " + totalSpeed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
+    }
 
     
 }
