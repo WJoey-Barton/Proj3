@@ -37,6 +37,7 @@ public class RaceController {
 
     private static final int NUM_CARS = 4;
 
+    /*
     Car car1 = generateCars();
     Car car2 = generateCars();
     Car car3 = generateCars();
@@ -47,6 +48,7 @@ public class RaceController {
     public RaceController() {
         track = new Track("Oval", sectorList);
     }
+     */
 
     @FXML
     private void initialize() {
@@ -59,7 +61,7 @@ public class RaceController {
         startLightSequence();
 
     }
-
+     /*
     @FXML
     private void ResetButton_clicked() {
 
@@ -67,6 +69,7 @@ public class RaceController {
             System.out.println(car.toString());
         }
     }
+     */
 
     public void startLightSequence() {
         Circle[] lights = {LightOne_Circle, LightTwo_Circle, LightThree_Circle, LightFour_Circle, LightFive_Circle};
@@ -108,6 +111,7 @@ public class RaceController {
         }
     }
 
+    /*
     private Car generateCars() {
         int engineRating = createRandomPerformanceRating();
         Engine engine = new Engine(engineRating);
@@ -122,6 +126,7 @@ public class RaceController {
 
         return new Car(engine, tire, aero, Color.RED, MaxVerstappen);
     }
+     */
 
     private int createRandomPerformanceRating() {
         int rating = rand.nextInt(21) + 60;
