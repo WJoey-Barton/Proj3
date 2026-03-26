@@ -1,55 +1,65 @@
 import javafx.scene.paint.Color;
 
 public class Car {
+    double angle;
+    double speed;
+    double MAX_SPEED = 2.1;
+    Color color;
+    double laneOffset;
+    boolean isPlayable;
 
-    public static final double BASE_SPEED = 5.0;
-    private double totalSpeed = 0;
-
+    /* Speed modifiers
     private final Engine engine;
     private final Tire tire;
     private final Aero aero;
 
+    // Misc
     private final int carNumber;
-    private final Color color;
     private final Driver driver;
+     */
 
-    private double currentSpeed;
-
-    private double currentX;
-    private double currentY;
-
-    private boolean isPlayerCar;
-    private boolean isFinished;
-
-    public Car(Engine engine, Tire tire, Aero aero, Color color, Driver driver) {
-        this.engine = engine;
-        this.tire = tire;
-        this.aero = aero;
+    public Car(double startAngle, double offset, Color color) {
+        this.isPlayable = false;
         this.color = color;
-        this.driver = driver;
-        carNumber = driver.getCarNumber();
-        calculateCarSpeed();
+        this.angle = startAngle;
+        this.laneOffset = offset;
+        this.speed = 1.2 + Math.random() * 0.9;
     }
+    public void setPlayer() {
+        this.isPlayable = true;
+    }
+
+    public double getX() {
+        return Race.CX + (Race.RX + laneOffset) * Math.cos(angle);
+    }
+    public double getY() {
+        return Race.CY + (Race.RY + laneOffset) * Math.sin(angle);
+    }
+    public void update(double deltaTime) {
+        angle += speed * deltaTime;
+    }
+
+
 
     /*
     This method takes the Engine, Tire, and Aero rating and finds the average and adds it to the BASE_SPEED.
     It also finds the highest rating of the three, multiplies it by 0.5, and adds that to the totalSpeed.
     This will reward a car that has a high, single attribute.
-    */
     private void calculateCarSpeed() {
         totalSpeed = BASE_SPEED + ((engine.getRating() + tire.getRating() + aero.getRating()) / 3) + 
         (0.5 * Math.max(engine.getRating(), Math.max(tire.getRating(), aero.getRating())));
     }
+     */
 
     //Getters
-    public int getCarNumber() { return this.carNumber;}
     public Color getColor() { return this.color;}
+
+    /*
+    public int getCarNumber() { return this.carNumber;}
     public Driver getDriver() { return this.driver;}
     public Engine getEngine() { return this.engine;}
     public Tire getTire() { return this.tire;}
     public Aero getAero() { return this.aero;}
-    public double getCurrentX() { return this.currentX;}
-    public double getCurrentY() { return this.currentY;}
     public double getCurrentSpeed() { return this.currentSpeed;}
     public boolean isPlayerCar() { return this.isPlayerCar;}
     public boolean isFinished() { return this.isFinished;}
@@ -58,6 +68,6 @@ public class Car {
     public String toString() {
         return "Total Speed: " + totalSpeed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
     }
-
+    */
     
 }
