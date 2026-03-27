@@ -35,29 +35,28 @@ public class RaceController {
     private GraphicsContext graphicsContext;
     private List<Car> cars;
 
+    private List<Sector> sectorList;
+
     private Track track;
     private Race race;
-    private List<Sector> sectorList;
+    
 
     private final Random rand = new Random();
 
     private static final int NUM_CARS = 4;
 
-    /*
+    
     public RaceController() {
-        track = new Track("Oval", sectorList);
+        
     }
-     */
+    
 
     @FXML
     private void initialize() {
         graphicsContext = canvas.getGraphicsContext2D();
         resetLights();
 
-        cars = new ArrayList<>();
-        cars.add(generateCars(0, 0,Color.YELLOW));
-        cars.add(generateCars(0, 20,Color.BLUE));
-        cars.add(generateCars(0, 40,Color.RED));
+        buildRace();
         
     }
 
@@ -73,6 +72,22 @@ public class RaceController {
         for(Car car : cars) {
             System.out.println(car.toString());
         }
+    }
+
+    private void buildRace() {
+        cars = new ArrayList<>();
+        cars.add(generateCars(0, 0,Color.YELLOW));
+        cars.add(generateCars(0, 20,Color.BLUE));
+        cars.add(generateCars(0, 40,Color.RED));
+
+        sectorList = new ArrayList<>();
+        sectorList.add(new Sector(0, "Sector_1", 0, Math.PI / 2));
+        sectorList.add(new Sector(1, "Sector_2", Math.PI / 2, Math.PI));
+        sectorList.add(new Sector(2, "Sector_3", Math.PI, 3 * Math.PI / 2));
+        sectorList.add(new Sector(3, "Sector_4", 3 * Math.PI / 2, 2 * Math.PI));
+
+        track = new Track("Oval", sectorList);
+        race = new Race(track, cars);
     }
      
 
@@ -123,12 +138,9 @@ public class RaceController {
     }
 
     private Car generateCars(double startAngle, double offset, Color color) {
-        double engineRating = createRandomPerformanceRating();
-        Engine engine = new Engine(engineRating);
-        double tireRating = createRandomPerformanceRating();
-        Tire tire = new Tire(tireRating);
-        double aeroRating = createRandomPerformanceRating();
-        Aero aero = new Aero(aeroRating);
+        Engine engine = new Engine(createRandomPerformanceRating());
+        Tire tire = new Tire(createRandomPerformanceRating());
+        Aero aero = new Aero(createRandomPerformanceRating());
 
         //Example version. 
         //We can have a list of names and numbers to randomly choose from.
@@ -138,8 +150,7 @@ public class RaceController {
     }
 
     private double createRandomPerformanceRating() {
-        Random rand = new Random();
-        double rating = rand.nextInt(21) + 60;
+        double rating = rand.nextInt(21) + 60 ;
         return rating / 100;
     }
 
