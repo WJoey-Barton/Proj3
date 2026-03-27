@@ -1,14 +1,20 @@
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class RaceController {
+
+    @FXML private Canvas canvas;
 
     @FXML private Circle LightOne_Circle;
     @FXML private Circle LightTwo_Circle;
@@ -26,25 +32,18 @@ public class RaceController {
     //800 ms
     private static final int LIGHTS_INTERVAL = 800;
 
+    private GraphicsContext graphicsContext;
+    private List<Car> cars;
+
     private Track track;
     private Race race;
     private List<Sector> sectorList;
-
-    //There will be 3 AIControllers
-    private AIController[] AIController;
 
     private final Random rand = new Random();
 
     private static final int NUM_CARS = 4;
 
     /*
-    Car car1 = generateCars();
-    Car car2 = generateCars();
-    Car car3 = generateCars();
-    Car car4 = generateCars();
-
-    Car[] cars = {car1, car2, car3, car4};
-
     public RaceController() {
         track = new Track("Oval", sectorList);
     }
@@ -52,7 +51,13 @@ public class RaceController {
 
     @FXML
     private void initialize() {
+        graphicsContext = canvas.getGraphicsContext2D();
         resetLights();
+
+        cars = new ArrayList<>();
+        cars.add(generateCars(0, 0,Color.YELLOW));
+        cars.add(generateCars(0, 20,Color.BLUE));
+        cars.add(generateCars(0, 40,Color.RED));
         
     }
 
@@ -61,7 +66,7 @@ public class RaceController {
         startLightSequence();
 
     }
-     /*
+     
     @FXML
     private void ResetButton_clicked() {
 
@@ -69,7 +74,7 @@ public class RaceController {
             System.out.println(car.toString());
         }
     }
-     */
+     
 
     public void startLightSequence() {
         Circle[] lights = {LightOne_Circle, LightTwo_Circle, LightThree_Circle, LightFour_Circle, LightFive_Circle};
@@ -97,11 +102,17 @@ public class RaceController {
             e -> {
                 resetLights();
                 countdownLights = 5;
+                startRace();
             }
         );
         timeline.getKeyFrames().add(turnOff);
 
         timeline.play();
+    }
+
+    private void startRace() {
+        Timer timer = new Timer(cars, graphicsContext);
+        timer.start();
     }
 
     private void resetLights() {
@@ -111,27 +122,28 @@ public class RaceController {
         }
     }
 
-    /*
-    private Car generateCars() {
-        int engineRating = createRandomPerformanceRating();
+    private Car generateCars(double startAngle, double offset, Color color) {
+        double engineRating = createRandomPerformanceRating();
         Engine engine = new Engine(engineRating);
-        int tireRating = createRandomPerformanceRating();
+        double tireRating = createRandomPerformanceRating();
         Tire tire = new Tire(tireRating);
-        int aeroRating = createRandomPerformanceRating();
+        double aeroRating = createRandomPerformanceRating();
         Aero aero = new Aero(aeroRating);
 
         //Example version. 
         //We can have a list of names and numbers to randomly choose from.
         Driver MaxVerstappen = new Driver("Max", 1);
 
-        return new Car(engine, tire, aero, Color.RED, MaxVerstappen);
+        return new Car(startAngle, offset, color, engine, tire, aero, MaxVerstappen.getCarNumber(), MaxVerstappen);
     }
-     */
 
-    private int createRandomPerformanceRating() {
-        int rating = rand.nextInt(21) + 60;
-        return rating;
+    private double createRandomPerformanceRating() {
+        Random rand = new Random();
+        double rating = rand.nextInt(21) + 60;
+        return rating / 100;
     }
+
+    
 
 
     

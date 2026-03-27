@@ -4,11 +4,12 @@ public class Car {
     double angle;
     double speed;
     double MAX_SPEED = 2.1;
+    double BASE_SPEED = 1;
     Color color;
     double laneOffset;
     boolean isPlayable;
 
-    /* Speed modifiers
+    // Speed modifiers
     private final Engine engine;
     private final Tire tire;
     private final Aero aero;
@@ -16,14 +17,21 @@ public class Car {
     // Misc
     private final int carNumber;
     private final Driver driver;
-     */
+    
 
-    public Car(double startAngle, double offset, Color color) {
+    public Car(double startAngle, double offset, Color color, Engine engine, Tire tire, Aero aero, int carNum, Driver driver) {
         this.isPlayable = false;
         this.color = color;
         this.angle = startAngle;
         this.laneOffset = offset;
-        this.speed = 1.2 + Math.random() * 0.9;
+        this.engine = engine;
+        this.tire = tire;
+        this.aero = aero;
+        this.carNumber = carNum;
+        this.driver = driver;
+        
+
+        this.speed = calculateCarSpeed();
     }
     public void setPlayer() {
         this.isPlayable = true;
@@ -45,11 +53,13 @@ public class Car {
     This method takes the Engine, Tire, and Aero rating and finds the average and adds it to the BASE_SPEED.
     It also finds the highest rating of the three, multiplies it by 0.5, and adds that to the totalSpeed.
     This will reward a car that has a high, single attribute.
-    private void calculateCarSpeed() {
-        totalSpeed = BASE_SPEED + ((engine.getRating() + tire.getRating() + aero.getRating()) / 3) + 
+    */
+    private double calculateCarSpeed() {
+        this.speed = BASE_SPEED + ((engine.getRating() + tire.getRating() + aero.getRating()) / 3) + 
         (0.5 * Math.max(engine.getRating(), Math.max(tire.getRating(), aero.getRating())));
+        return this.speed;
     }
-     */
+     
 
     //Getters
     public Color getColor() { return this.color;}

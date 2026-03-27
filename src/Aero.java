@@ -1,11 +1,11 @@
 public class Aero {
 
-    public static final int MIN_RATING = 60;
-    public static final int MAX_RATING = 80;
+    public static final double MIN_RATING = 6.0;
+    public static final double MAX_RATING = 8.0;
 
-    private final int rating;
+    private final double rating;
 
-    public Aero(int rating) {
+    public Aero(double rating) {
 
         //NEEDS A PROPER THROWS
         if(rating < MIN_RATING || rating > MAX_RATING) {
@@ -14,5 +14,5 @@ public class Aero {
         this.rating = rating;
     }
     
-    public int getRating() { return this.rating;}
+    public double getRating() { return this.rating;}
 }
