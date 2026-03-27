@@ -38,10 +38,10 @@ public class Car {
     }
 
     public double getX() {
-        return Race.CX + (Race.RX + laneOffset) * Math.cos(angle);
+        return Track.CX + (Track.RX + laneOffset) * Math.cos(angle);
     }
     public double getY() {
-        return Race.CY + (Race.RY + laneOffset) * Math.sin(angle);
+        return Track.CY + (Track.RY + laneOffset) * Math.sin(angle);
     }
     public void update(double deltaTime) {
         angle += speed * deltaTime;
@@ -73,11 +73,12 @@ public class Car {
     public double getCurrentSpeed() { return this.currentSpeed;}
     public boolean isPlayerCar() { return this.isPlayerCar;}
     public boolean isFinished() { return this.isFinished;}
+    */
 
     @Override
     public String toString() {
-        return "Total Speed: " + totalSpeed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
+        return "Total Speed: " + speed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
     }
-    */
+    
     
 }
