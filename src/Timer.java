@@ -6,11 +6,11 @@ import java.util.List;
 public class Timer extends AnimationTimer {
 
     long lastNano = 0;
-    List<Car> carList;
+    Race race;
     GraphicsContext graphicsContext;
 
-    public Timer(List<Car> carList, GraphicsContext graphicsContext) {
-        this.carList = carList;
+    public Timer(Race race, GraphicsContext graphicsContext) {
+        this.race = race;
         this.graphicsContext = graphicsContext;
     }
 
@@ -25,12 +25,16 @@ public class Timer extends AnimationTimer {
         lastNano = now;
 
         graphicsContext.clearRect(0, 0, 640, 480);
-        for(Car car : carList) {
+        for(Car car : race.getCars()) {
             car.update(deltaTime);
+
+            if(car.checkSector(race.getTrack().getSectorList())) {
+                System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
+            }
 
             graphicsContext.setFill(car.color);
             graphicsContext.fillOval(car.getX() - 10, car.getY() - 10, 20,20);
-            System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
+            //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
         }
     }
 }

@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -75,16 +76,18 @@ public class RaceController {
     }
 
     private void buildRace() {
-        cars = new ArrayList<>();
-        cars.add(generateCars(0, 0,Color.YELLOW));
-        cars.add(generateCars(0, 20,Color.BLUE));
-        cars.add(generateCars(0, 40,Color.RED));
 
         sectorList = new ArrayList<>();
         sectorList.add(new Sector(0, "Sector_1", 0, Math.PI / 2));
         sectorList.add(new Sector(1, "Sector_2", Math.PI / 2, Math.PI));
         sectorList.add(new Sector(2, "Sector_3", Math.PI, 3 * Math.PI / 2));
         sectorList.add(new Sector(3, "Sector_4", 3 * Math.PI / 2, 2 * Math.PI));
+
+        cars = new ArrayList<>();
+        cars.add(generateCars(sectorList.get(0).getStartAngle(), 0, Color.YELLOW));
+        cars.add(generateCars(sectorList.get(1).getStartAngle(), 20, Color.BLUE));
+        cars.add(generateCars(sectorList.get(2).getStartAngle(), 40, Color.RED));
+        cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
         race = new Race(track, cars);
@@ -126,7 +129,7 @@ public class RaceController {
     }
 
     private void startRace() {
-        Timer timer = new Timer(cars, graphicsContext);
+        Timer timer = new Timer(race, graphicsContext);
         timer.start();
     }
 
@@ -146,7 +149,7 @@ public class RaceController {
         //We can have a list of names and numbers to randomly choose from.
         Driver MaxVerstappen = new Driver("Max", 1);
 
-        return new Car(startAngle, offset, color, engine, tire, aero, MaxVerstappen.getCarNumber(), MaxVerstappen);
+        return new Car(startAngle, offset, color, engine, tire, aero, rand.nextInt(99) + 1, MaxVerstappen);
     }
 
     private double createRandomPerformanceRating() {

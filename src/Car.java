@@ -1,3 +1,5 @@
+import java.util.List;
+
 import javafx.scene.paint.Color;
 
 public class Car {
@@ -17,6 +19,8 @@ public class Car {
     // Misc
     private final int carNumber;
     private final Driver driver;
+
+    private int currentSectorID = 0;
     
 
     public Car(double startAngle, double offset, Color color, Engine engine, Tire tire, Aero aero, int carNum, Driver driver) {
@@ -45,6 +49,10 @@ public class Car {
     }
     public void update(double deltaTime) {
         angle += speed * deltaTime;
+
+        if(angle >= 2 * Math.PI) {
+            angle -= 2 * Math.PI;
+        }
     }
 
 
@@ -59,10 +67,25 @@ public class Car {
         (0.5 * Math.max(engine.getRating(), Math.max(tire.getRating(), aero.getRating())));
         return this.speed;
     }
+
+
+    public boolean checkSector(List<Sector> sectors) {
+        
+        for(Sector sector : sectors) {
+            if(angle >= sector.getStartAngle() && angle < sector.getEndAngle()) {
+                if(this.currentSectorID != sector.getSectorID()) {
+                    this.currentSectorID = sector.getSectorID();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
      
 
     //Getters
     public Color getColor() { return this.color;}
+    public int getCurrentSectorID() { return this.currentSectorID;}
 
     /*
     public int getCarNumber() { return this.carNumber;}
@@ -77,7 +100,8 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Total Speed: " + speed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
+        return "" + this.carNumber;
+        //return "Total Speed: " + speed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
     }
     
     
