@@ -44,7 +44,8 @@ public class RaceView {
         
         graphicsContext.save();
 
-        //Translate will 
+        //Translate will shift the point 0,0 to the car's center.
+        //This ensures accurate rotation
         graphicsContext.translate(x, y);
 
         //Rotate will ensure that the car is facing the correct direction,
@@ -55,7 +56,6 @@ public class RaceView {
 
         /*
         We draw the car from the center, so it pivots correctly.
-
         */        
         graphicsContext.fillRect(-CAR_WIDTH / 2, -CAR_HEIGHT / 2, CAR_WIDTH, CAR_HEIGHT);
 
