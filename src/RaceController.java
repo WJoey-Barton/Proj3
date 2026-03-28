@@ -36,6 +36,8 @@ public class RaceController {
     private GraphicsContext graphicsContext;
     private List<Car> cars;
 
+    private RaceView raceView;
+
     private List<Sector> sectorList;
 
     private Track track;
@@ -56,8 +58,10 @@ public class RaceController {
     private void initialize() {
         graphicsContext = canvas.getGraphicsContext2D();
         resetLights();
-
         buildRace();
+
+        raceView = new RaceView(graphicsContext);
+        raceView.render(race);
         
     }
 
@@ -129,7 +133,8 @@ public class RaceController {
     }
 
     private void startRace() {
-        Timer timer = new Timer(race, graphicsContext);
+        
+        Timer timer = new Timer(race, raceView);
         timer.start();
     }
 

@@ -134,9 +134,10 @@ public class Car {
     public Color getColor() { return this.color;}
     public int getCurrentSectorID() { return this.currentSectorID;}
     public int getLapsRemaining() { return this.lapsRemaining;}
-
-    /*
     public int getCarNumber() { return this.carNumber;}
+    public double getAngle() { return this.angle;}
+    /*
+    
     public Driver getDriver() { return this.driver;}
     public Engine getEngine() { return this.engine;}
     public Tire getTire() { return this.tire;}

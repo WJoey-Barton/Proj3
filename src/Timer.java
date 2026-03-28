@@ -7,11 +7,11 @@ public class Timer extends AnimationTimer {
 
     long lastNano = 0;
     Race race;
-    GraphicsContext graphicsContext;
+    RaceView raceView;
 
-    public Timer(Race race, GraphicsContext graphicsContext) {
+    public Timer(Race race, RaceView raceView) {
         this.race = race;
-        this.graphicsContext = graphicsContext;
+        this.raceView = raceView;
     }
 
     @Override
@@ -24,7 +24,6 @@ public class Timer extends AnimationTimer {
         double deltaTime = (now - lastNano) / 1_000_000_000.0;
         lastNano = now;
 
-        graphicsContext.clearRect(0, 0, 640, 480);
         for(Car car : race.getCars()) {
             car.update(deltaTime);
 
@@ -32,9 +31,9 @@ public class Timer extends AnimationTimer {
                 System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
             }
 
-            graphicsContext.setFill(car.color);
-            graphicsContext.fillOval(car.getX() - 10, car.getY() - 10, 20,20);
             //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
         }
+
+        raceView.render(race);
     }
 }
