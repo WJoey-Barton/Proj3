@@ -3,6 +3,10 @@ import java.util.List;
 import javafx.scene.paint.Color;
 
 public class Car {
+
+    //Lives here for now. Definitely should live in Race.
+    private static final int TOTAL_LAPS = 2;
+
     double angle;
     double speed;
     double MAX_SPEED = 2.1;
@@ -21,6 +25,14 @@ public class Car {
     private final Driver driver;
 
     private int currentSectorID = 0;
+
+    //Holds the start angle for referencing when a race is complete
+    private final double startAngle;
+    private double previousAngle;
+    private int lapsRemaining;
+    private boolean isFinished = false;
+
+
     
 
     public Car(double startAngle, double offset, Color color, Engine engine, Tire tire, Aero aero, int carNum, Driver driver) {
@@ -34,6 +46,9 @@ public class Car {
         this.carNumber = carNum;
         this.driver = driver;
         
+        this.startAngle = startAngle;
+        this.previousAngle = startAngle;
+        this.lapsRemaining = TOTAL_LAPS;
 
         this.speed = calculateCarSpeed();
     }
@@ -48,14 +63,24 @@ public class Car {
         return Track.CY + (Track.RY + laneOffset) * Math.sin(angle);
     }
     public void update(double deltaTime) {
+
+        //Brings the car to a slow stop
+        if(isFinished) {
+            speed = Math.max(0, speed - 1.3 * deltaTime);
+            angle += speed * deltaTime;
+            return;
+        }
+
+        previousAngle = angle;
         angle += speed * deltaTime;
 
         if(angle >= 2 * Math.PI) {
             angle -= 2 * Math.PI;
         }
+
+        checkLapCompletion();
+
     }
-
-
 
     /*
     This method takes the Engine, Tire, and Aero rating and finds the average and adds it to the BASE_SPEED.
@@ -81,11 +106,34 @@ public class Car {
         }
         return false;
     }
+
+    private void checkLapCompletion() {
+
+        //The angle is wrapped when 2PI (the previous angle) is reset to 0 (the current)
+        boolean wrapped = previousAngle > angle;
+        boolean crossed;
+
+        if(wrapped) {
+            
+            crossed = startAngle >= previousAngle || startAngle <= angle;
+        } else {
+            crossed = previousAngle < startAngle && angle >= startAngle;
+        }
+        if(crossed) {
+            lapsRemaining--;
+            System.out.println("Lap completed. Laps remaining: " + lapsRemaining);
+
+            if(lapsRemaining <= 0) {
+                isFinished = true;
+            }
+        }
+    }
      
 
     //Getters
     public Color getColor() { return this.color;}
     public int getCurrentSectorID() { return this.currentSectorID;}
+    public int getLapsRemaining() { return this.lapsRemaining;}
 
     /*
     public int getCarNumber() { return this.carNumber;}
