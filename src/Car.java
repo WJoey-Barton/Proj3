@@ -1,10 +1,16 @@
+import java.util.List;
+
 import javafx.scene.paint.Color;
 
 public class Car {
+
+    //Lives here for now. Definitely should live in Race.
+    private static final int TOTAL_LAPS = 20;
+
     double angle;
     double speed;
     double MAX_SPEED = 2.1;
-    double BASE_SPEED = 1;
+    double BASE_SPEED = 1.0;
     Color color;
     double laneOffset;
     boolean isPlayable;
@@ -17,7 +23,15 @@ public class Car {
     // Misc
     private final int carNumber;
     private final Driver driver;
-    
+
+    private int currentSectorID = 0;
+    private TrackSegment currentSegment;
+
+    //Holds the start angle for referencing when a race is complete
+    private final double startAngle;
+    private double previousAngle;
+    private int lapsRemaining;
+    private boolean isFinished = false;
 
     public Car(double startAngle, double offset, Color color, Engine engine, Tire tire, Aero aero, int carNum, Driver driver) {
         this.isPlayable = false;
@@ -30,42 +44,121 @@ public class Car {
         this.carNumber = carNum;
         this.driver = driver;
         
+        this.startAngle = startAngle;
+        this.previousAngle = startAngle;
+        this.lapsRemaining = TOTAL_LAPS;
 
-        this.speed = calculateCarSpeed();
+        this.speed = BASE_SPEED;
     }
+
+    public void initOnTrack(Track track) {
+        this.currentSegment = track.getSegmentAtAngle(this.angle);
+        calculateCarSpeed();
+    }
+
     public void setPlayer() {
         this.isPlayable = true;
     }
 
     public double getX() {
-        return Race.CX + (Race.RX + laneOffset) * Math.cos(angle);
+        return Track.CX + (Track.RX + laneOffset) * Math.cos(angle);
     }
     public double getY() {
-        return Race.CY + (Race.RY + laneOffset) * Math.sin(angle);
+        return Track.CY + (Track.RY + laneOffset) * Math.sin(angle);
     }
-    public void update(double deltaTime) {
-        angle += speed * deltaTime;
+    public void update(double deltaTime, Track track) {
+
+        //Brings the car to a slow stop
+        if(isFinished) {
+            speed = Math.max(0, speed - 0.3 * deltaTime);
+            angle -= speed * deltaTime;
+            wrapAngle();
+            return;
+        }
+
+        previousAngle = angle;
+        angle -= speed * deltaTime;
+        wrapAngle();
+
+        TrackSegment newSegment = track.getSegmentAtAngle(angle);
+        if(newSegment.getSegmentID() != currentSegment.getSegmentID()) {
+            currentSegment = newSegment;
+            calculateCarSpeed();
+        }
+
+        checkLapCompletion();
     }
 
-
+    private void wrapAngle() {
+        if(angle < 0 ) {
+            angle += 2 * Math.PI;
+        }
+        if(angle >= 2 * Math.PI) {
+            angle -= 2 * Math.PI;
+        }
+    }
 
     /*
-    This method takes the Engine, Tire, and Aero rating and finds the average and adds it to the BASE_SPEED.
-    It also finds the highest rating of the three, multiplies it by 0.5, and adds that to the totalSpeed.
-    This will reward a car that has a high, single attribute.
+    This method takes the Engine, Tire, and Aero rating and, based on which segment of the track the car is currently on
+    will have a unique speed.
     */
-    private double calculateCarSpeed() {
-        this.speed = BASE_SPEED + ((engine.getRating() + tire.getRating() + aero.getRating()) / 3) + 
-        (0.5 * Math.max(engine.getRating(), Math.max(tire.getRating(), aero.getRating())));
-        return this.speed;
+    public void calculateCarSpeed() {
+        double componentRating = currentSegment.calculateSpeed(engine, tire, aero);
+
+        //double average = ((engine.getRating() + tire.getRating() + aero.getRating()) / 3);
+
+        double normalized = (componentRating - PerformanceComponent.MIN_RATING) / (PerformanceComponent.MAX_RATING - PerformanceComponent.MIN_RATING);
+        this.speed = BASE_SPEED + normalized + (0.5 * normalized);
+
+        System.out.println("Base Speed " + BASE_SPEED + " normalized: " + normalized + " Component Rating: " + componentRating);
+        
+    }
+
+
+    public boolean checkSector(List<Sector> sectors) {
+        
+        for(Sector sector : sectors) {
+            if(angle >= sector.getStartAngle() && angle < sector.getEndAngle()) {
+                if(this.currentSectorID != sector.getSectorID()) {
+                    this.currentSectorID = sector.getSectorID();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void checkLapCompletion() {
+
+        //The angle is wrapped when 2PI (the previous angle) is reset to 0 (the current)
+        boolean wrapped = previousAngle > angle;
+        boolean crossed;
+
+        if(wrapped) {
+            
+            crossed = startAngle >= previousAngle || startAngle <= angle;
+        } else {
+            crossed = previousAngle < startAngle && angle >= startAngle;
+        }
+        if(crossed) {
+            lapsRemaining--;
+            System.out.println("Lap completed. Laps remaining: " + lapsRemaining);
+
+            if(lapsRemaining <= 0) {
+                isFinished = true;
+            }
+        }
     }
      
 
     //Getters
     public Color getColor() { return this.color;}
-
-    /*
+    public int getCurrentSectorID() { return this.currentSectorID;}
+    public int getLapsRemaining() { return this.lapsRemaining;}
     public int getCarNumber() { return this.carNumber;}
+    public double getAngle() { return this.angle;}
+    /*
+    
     public Driver getDriver() { return this.driver;}
     public Engine getEngine() { return this.engine;}
     public Tire getTire() { return this.tire;}
@@ -73,11 +166,13 @@ public class Car {
     public double getCurrentSpeed() { return this.currentSpeed;}
     public boolean isPlayerCar() { return this.isPlayerCar;}
     public boolean isFinished() { return this.isFinished;}
+    */
 
     @Override
     public String toString() {
-        return "Total Speed: " + totalSpeed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
+        //return "" + this.carNumber;
+        return "Total Speed: " + speed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
     }
-    */
+    
     
 }

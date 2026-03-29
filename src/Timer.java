@@ -1,17 +1,14 @@
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.GraphicsContext;
-
-import java.util.List;
 
 public class Timer extends AnimationTimer {
 
     long lastNano = 0;
-    List<Car> carList;
-    GraphicsContext graphicsContext;
+    Race race;
+    RaceView raceView;
 
-    public Timer(List<Car> carList, GraphicsContext graphicsContext) {
-        this.carList = carList;
-        this.graphicsContext = graphicsContext;
+    public Timer(Race race, RaceView raceView) {
+        this.race = race;
+        this.raceView = raceView;
     }
 
     @Override
@@ -24,13 +21,16 @@ public class Timer extends AnimationTimer {
         double deltaTime = (now - lastNano) / 1_000_000_000.0;
         lastNano = now;
 
-        graphicsContext.clearRect(0, 0, 640, 480);
-        for(Car car : carList) {
-            car.update(deltaTime);
+        for(Car car : race.getCars()) {
+            car.update(deltaTime, race.getTrack());
 
-            graphicsContext.setFill(car.color);
-            graphicsContext.fillOval(car.getX() - 10, car.getY() - 10, 20,20);
-            System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
+            // if(car.checkSector(race.getTrack().getSectorList())) {
+            //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
+            // }
+
+            //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
         }
+
+        raceView.render(race);
     }
 }

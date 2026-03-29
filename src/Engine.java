@@ -1,7 +1,4 @@
-public class Engine {
-
-    public static final double MIN_RATING = 6.0;
-    public static final double MAX_RATING = 8.0;
+public class Engine implements PerformanceComponent{
 
     private final double rating;
 
