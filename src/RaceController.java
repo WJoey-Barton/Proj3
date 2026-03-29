@@ -133,9 +133,14 @@ public class RaceController {
     }
 
     private void startRace() {
-        
+
+        for(Car car : race.getCars()) {
+            car.initOnTrack(track);
+        }
+
         Timer timer = new Timer(race, raceView);
         timer.start();
+
     }
 
     private void resetLights() {

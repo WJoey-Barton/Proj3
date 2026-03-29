@@ -25,11 +25,11 @@ public class Timer extends AnimationTimer {
         lastNano = now;
 
         for(Car car : race.getCars()) {
-            car.update(deltaTime);
+            car.update(deltaTime, race.getTrack());
 
-            if(car.checkSector(race.getTrack().getSectorList())) {
-                System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
-            }
+            // if(car.checkSector(race.getTrack().getSectorList())) {
+            //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
+            // }
 
             //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
         }
