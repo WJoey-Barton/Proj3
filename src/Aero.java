@@ -1,3 +1,10 @@
+//Joey Barton
+
+/*
+Implements the interface PerformanceComponent
+Holds the rating value for the Aero component.
+*/
+
 public class Aero implements PerformanceComponent{
 
     private final double rating;

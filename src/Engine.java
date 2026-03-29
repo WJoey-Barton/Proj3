@@ -1,3 +1,10 @@
+//Joey Barton
+
+/*
+Implements the interface PerformanceComponent
+Holds the rating value for the Engine component
+*/
+
 public class Engine implements PerformanceComponent{
 
     private final double rating;

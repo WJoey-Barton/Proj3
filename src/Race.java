@@ -1,3 +1,11 @@
+//Joey Barton
+
+/*
+Acts as a data container for a single Race event
+Holds the configuration for the race, including the Track being used
+and the participating cars.
+*/
+
 import java.util.List;
 
 public class Race {

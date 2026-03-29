@@ -1,3 +1,9 @@
+//Joey Barton
+
+/*
+Handles all visual rendering for the race simulation.
+*/
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -7,9 +13,10 @@ import javafx.scene.text.FontWeight;
 public class RaceView {
 
     private final GraphicsContext graphicsContext;
+
+    //Rendering constants
     private static final double CAR_WIDTH = 20;
     private static final double CAR_HEIGHT = 12;
-
     private static final double TRACK_WIDTH = 50;
     private static final double CURB_WIDTH = 8;
     private static final double GRASS_WIDTH = 20;
@@ -18,6 +25,7 @@ public class RaceView {
         this.graphicsContext = graphicsContext;
     }
 
+    //Clears the frame and redraws the entire race state.
     public void render(Race race) {
         clearCanvas();
         drawTrack();
@@ -27,12 +35,15 @@ public class RaceView {
         }
     }
 
+    //Clears the canvas for the next frame of animation
     private void clearCanvas() {
         graphicsContext.setFill(Color.color(0.1, 0.1,0.1));
         graphicsContext.clearRect(0, 0, 640, 480);
 
     }
 
+    //Draws the track layout using a series of overlapping oval "bands".
+    //Layers are drawn from largest (outside) to smallest (inside)
     private void drawTrack() {
         double totalOuter = TRACK_WIDTH + CURB_WIDTH + GRASS_WIDTH;
 
@@ -45,11 +56,14 @@ public class RaceView {
         //On Track
         drawOvalBand(Track.RX + TRACK_WIDTH, Track.RY + TRACK_WIDTH, Color.DARKGRAY);
 
+        //Inside Orange Curb
         drawOvalBand(Track.RX + CURB_WIDTH, Track.RY + CURB_WIDTH, Color.DARKORANGE);
+        
         //Inside Grass
         drawOvalBand(Track.RX, Track.RY, Color.FORESTGREEN);
     }
 
+    //Helper method to draw a filled oval centered on the track's center.
     private void drawOvalBand(double rx, double ry, Color color) {
         graphicsContext.setFill(color);
         graphicsContext.fillOval(

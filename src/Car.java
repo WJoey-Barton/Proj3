@@ -1,3 +1,11 @@
+//Joey Barton
+
+/*
+The Car class represents an individual vehicle within the simulation.
+The Car moves around the track using angular logic and calculates its speed
+based on mechanical components and track conditions.
+*/
+
 import java.util.List;
 
 import javafx.scene.paint.Color;
@@ -7,6 +15,7 @@ public class Car {
     //Lives here for now. Definitely should live in Race.
     private static final int TOTAL_LAPS = 20;
 
+    //Movement and Positioning
     double angle;
     double speed;
     double MAX_SPEED = 2.1;
@@ -15,15 +24,14 @@ public class Car {
     double laneOffset;
     boolean isPlayable;
 
-    // Speed modifiers
+    // Speed modifiers / Performance Components
     private final Engine engine;
     private final Tire tire;
     private final Aero aero;
 
-    // Misc
+    // Identity
     private final int carNumber;
     private final Driver driver;
-
     private int currentSectorID = 0;
     private TrackSegment currentSegment;
 
@@ -51,21 +59,30 @@ public class Car {
         this.speed = BASE_SPEED;
     }
 
+    //Initializes the car's starting segment and calculates initial speed.
     public void initOnTrack(Track track) {
         this.currentSegment = track.getSegmentAtAngle(this.angle);
         calculateCarSpeed();
     }
 
+    //Flags this car as being controlled by the user
     public void setPlayer() {
         this.isPlayable = true;
     }
 
+    //Returns the calculated X coordinate
+    //based on track radius and lane offset.
     public double getX() {
         return Track.CX + (Track.RX + laneOffset) * Math.cos(angle);
     }
+
+    //Returns the calculated Y coordinate
+    //based on track radius and lane offset.
     public double getY() {
         return Track.CY + (Track.RY + laneOffset) * Math.sin(angle);
     }
+
+    //Updates the car's position and race state for the current frame.
     public void update(double deltaTime, Track track) {
 
         //Brings the car to a slow stop
@@ -80,6 +97,7 @@ public class Car {
         angle -= speed * deltaTime;
         wrapAngle();
 
+        //Checks for change in TrackSegment to recalculate speed
         TrackSegment newSegment = track.getSegmentAtAngle(angle);
         if(newSegment.getSegmentID() != currentSegment.getSegmentID()) {
             currentSegment = newSegment;
@@ -89,6 +107,7 @@ public class Car {
         checkLapCompletion();
     }
 
+    //Ensures the angle stays within the range of 0 to 2PI
     private void wrapAngle() {
         if(angle < 0 ) {
             angle += 2 * Math.PI;
@@ -114,7 +133,7 @@ public class Car {
         
     }
 
-
+    //Checks if the car has entered a new sector.
     public boolean checkSector(List<Sector> sectors) {
         
         for(Sector sector : sectors) {
@@ -128,6 +147,8 @@ public class Car {
         return false;
     }
 
+    //Determines if the car has crossed the start/finish line by comparing
+    //the current angle and previous angle relative to the startAngle.
     private void checkLapCompletion() {
 
         //The angle is wrapped when 2PI (the previous angle) is reset to 0 (the current)
