@@ -23,6 +23,14 @@ public class RaceController {
     @FXML private Circle LightFour_Circle;
     @FXML private Circle LightFive_Circle;
 
+    //All labels in a VBox
+    //These can feature the quickest laps
+    //or whatever we want for the user to see.
+    @FXML private Label P1_Label;
+    @FXML private Label P2_Label;
+    @FXML private Label P3_Label;
+    @FXML private Label P4_Label;
+
     /*
         countdownLights goes:
         0-4 = all lights lit (one per LIGHTS_INTERVAL)
@@ -59,6 +67,7 @@ public class RaceController {
         graphicsContext = canvas.getGraphicsContext2D();
         resetLights();
         buildRace();
+        populateUILabels();
 
         raceView = new RaceView(graphicsContext);
         raceView.render(race);
@@ -88,9 +97,9 @@ public class RaceController {
         sectorList.add(new Sector(3, "Sector_4", 3 * Math.PI / 2, 2 * Math.PI));
 
         cars = new ArrayList<>();
-        cars.add(generateCars(sectorList.get(0).getStartAngle(), 0, Color.YELLOW));
+        cars.add(generateCars(sectorList.get(0).getStartAngle(), 15, Color.YELLOW));
         cars.add(generateCars(sectorList.get(1).getStartAngle(), 20, Color.BLUE));
-        cars.add(generateCars(sectorList.get(2).getStartAngle(), 40, Color.RED));
+        cars.add(generateCars(sectorList.get(2).getStartAngle(), 30, Color.RED));
         cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
@@ -165,6 +174,13 @@ public class RaceController {
     private double createRandomPerformanceRating() {
         double rating = rand.nextInt(21) + 60 ;
         return rating / 100;
+    }
+
+    private void populateUILabels() {
+        P1_Label.setText("Car #" + cars.get(0).getCarNumber());
+        P2_Label.setText("Car #" + cars.get(1).getCarNumber());
+        P3_Label.setText("Car #" + cars.get(2).getCarNumber());
+        P4_Label.setText("Car #" + cars.get(3).getCarNumber());
     }
 
     

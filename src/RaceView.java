@@ -10,12 +10,17 @@ public class RaceView {
     private static final double CAR_WIDTH = 20;
     private static final double CAR_HEIGHT = 12;
 
+    private static final double TRACK_WIDTH = 50;
+    private static final double CURB_WIDTH = 8;
+    private static final double GRASS_WIDTH = 20;
+
     public RaceView(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
     }
 
     public void render(Race race) {
         clearCanvas();
+        drawTrack();
 
         for(Car car : race.getCars()) {
             drawCar(car);
@@ -23,7 +28,35 @@ public class RaceView {
     }
 
     private void clearCanvas() {
+        graphicsContext.setFill(Color.color(0.1, 0.1,0.1));
         graphicsContext.clearRect(0, 0, 640, 480);
+
+    }
+
+    private void drawTrack() {
+        double totalOuter = TRACK_WIDTH + CURB_WIDTH + GRASS_WIDTH;
+
+        //Outside Grass
+        drawOvalBand(Track.RX + totalOuter, Track.RY + totalOuter, Color.FORESTGREEN);
+
+        //Orange Outside Curb
+        drawOvalBand(Track.RX + TRACK_WIDTH + CURB_WIDTH, Track.RY + TRACK_WIDTH + CURB_WIDTH, Color.DARKORANGE);
+
+        //On Track
+        drawOvalBand(Track.RX + TRACK_WIDTH, Track.RY + TRACK_WIDTH, Color.DARKGRAY);
+
+        drawOvalBand(Track.RX + CURB_WIDTH, Track.RY + CURB_WIDTH, Color.DARKORANGE);
+        //Inside Grass
+        drawOvalBand(Track.RX, Track.RY, Color.FORESTGREEN);
+    }
+
+    private void drawOvalBand(double rx, double ry, Color color) {
+        graphicsContext.setFill(color);
+        graphicsContext.fillOval(
+            Track.CX - rx, 
+            Track.CY - ry, 
+            rx * 2, 
+            ry * 2);
     }
 
     //Cesar calculated the cars path
