@@ -13,8 +13,6 @@ import javafx.scene.paint.Color;
 
 public class Car    {
 
-    //Lives here for now. Definitely should live in Race.
-    private static final int TOTAL_LAPS = 20;
     private final List<Integer> pathTaken = new ArrayList<>();
     private double totalRaceTime = 0.0;
     private double currentLapTime = 0.0;
@@ -59,13 +57,17 @@ public class Car    {
 
         this.startAngle = startAngle;
         this.previousAngle = startAngle;
-        this.lapsRemaining = TOTAL_LAPS;
+
+        //Handled in initOnTrack now
+        //this.lapsRemaining = TOTAL_LAPS;
 
         this.speed = BASE_SPEED;
     }
 
     //Initializes the car's starting segment and calculates initial speed.
-    public void initOnTrack(Track track) {
+    //Also sets the number of laps for each car, set by Race
+    public void initOnTrack(Track track, int totalLaps) {
+        this.lapsRemaining = totalLaps;
         this.currentSegment = track.getSegmentAtAngle(this.angle);
         calculateCarSpeed();
         this.pathTaken.add(this.currentSectorID);

@@ -40,6 +40,7 @@ public class RaceController {
     @FXML private Label P3_Label;
     @FXML private Label P4_Label;
 
+
     /*
         countdownLights goes:
         0-4 = all lights lit (one per LIGHTS_INTERVAL)
@@ -64,6 +65,8 @@ public class RaceController {
     private final Random rand = new Random();
 
     private static final int NUM_CARS = 4;
+
+    private List<String> driverNames = new ArrayList<>();
 
     
     public RaceController() {
@@ -105,6 +108,13 @@ public class RaceController {
     //Populates the track with sectors and generates cars.
     private void buildRace() {
 
+        driverNames.clear();
+        driverNames.addAll(List.of("Max Verstappen", "Fernando Alonso", "Sebastian Vettel", "Lando Norris", 
+                                "Lewis Hamilton", "Gabriel Bortoleto", "Charles Leclerc", "Arvid Lindblad", 
+                                "Valtteri Bottas", "Carlos Sainz", "Oscar Piastri", "Isack Hadjar", "Alex Albon",
+                                "Pierre Gasly", "Kimi Antonelli", "Kimi Raikkonen"
+                            ));
+
         sectorList = new ArrayList<>();
         sectorList.add(new Sector(0, "Sector_1", 0, Math.PI / 2));
         sectorList.add(new Sector(1, "Sector_2", Math.PI / 2, Math.PI));
@@ -118,7 +128,7 @@ public class RaceController {
         cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
-        race = new Race(track, cars);
+        race = new Race(track, cars, 20);
     }
      
     //Handles the visual countdown sequence.
@@ -163,9 +173,7 @@ public class RaceController {
     //Transitions the race state to active and starts the game timer.
     private void startRace() {
 
-        for(Car car : race.getCars()) {
-            car.initOnTrack(track);
-        }
+        race.initCarsOnTrack();
 
         Timer timer = new Timer(race, raceView);
         timer.start();
@@ -188,9 +196,9 @@ public class RaceController {
 
         //Example version. 
         //We can have a list of names and numbers to randomly choose from.
-        Driver MaxVerstappen = new Driver("Max", 1);
+        Driver driver = new Driver(getDriverName(), 1);
 
-        return new Car(startAngle, offset, color, engine, tire, aero, rand.nextInt(99) + 1, MaxVerstappen);
+        return new Car(startAngle, offset, color, engine, tire, aero, rand.nextInt(99) + 1, driver);
     }
 
     //Generates a random rating between 0.60 and 0.80
@@ -202,12 +210,17 @@ public class RaceController {
     //Updates the UI labels
     //@TODO setup useful information for these
     private void populateUILabels() {
-        P1_Label.setText("Car #" + cars.get(0).getCarNumber());
-        P2_Label.setText("Car #" + cars.get(1).getCarNumber());
-        P3_Label.setText("Car #" + cars.get(2).getCarNumber());
-        P4_Label.setText("Car #" + cars.get(3).getCarNumber());
+        P1_Label.setText(cars.get(0).getDriver().getName() + " | #" + cars.get(0).getCarNumber());
+        P2_Label.setText(cars.get(1).getDriver().getName() + " | #" + cars.get(1).getCarNumber());
+        P3_Label.setText(cars.get(2).getDriver().getName() + " | #" + cars.get(2).getCarNumber());
+        P4_Label.setText(cars.get(3).getDriver().getName() + " | #" + cars.get(3).getCarNumber());
     }
 
+    private String getDriverName() {
+        int selection = rand.nextInt(15);
+        return driverNames.remove(selection);
+        
+    }
     
 
 

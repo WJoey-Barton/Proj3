@@ -41,18 +41,29 @@ public class Race {
     private final List<Car> carList;
     private final Track track;
 
+    private final int totalLaps;
+
     private boolean raceStarted = false;
     private boolean raceFinished = false;
 
     private final List<Car> finishOrder = new ArrayList<>();
 
-    public Race(Track track, List<Car> cars) {
+    public Race(Track track, List<Car> cars, int totalLaps) {
         this.track = track;
         this.carList = cars;
+        this.totalLaps = totalLaps;
+    }
+
+    //Called at start of race so each Car gets the lap count.
+    public void initCarsOnTrack() {
+        for(Car car : carList) {
+            car.initOnTrack(track, totalLaps);
+        }
     }
 
     public Track getTrack() { return this.track; }
     public List<Car> getCars() { return this.carList; }
+    public int getTotalLaps() { return this.totalLaps;}
 
     public boolean isRaceStarted() { return this.raceStarted; }
     public boolean isRaceFinished() { return this.raceFinished; }
