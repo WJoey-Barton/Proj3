@@ -1,3 +1,10 @@
+//Joey Barton
+
+/*
+Implements the interface PerformanceComponent
+Holds the rating value for the Tire component.
+*/
+
 public class Tire implements PerformanceComponent{
 
     private final double rating;
