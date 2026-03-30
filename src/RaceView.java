@@ -51,26 +51,65 @@ public class RaceView {
 
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 28));
-        graphicsContext.fillText("Race Results", 300, 60);
+        graphicsContext.fillText("Race Results", 300, 40);
 
-        graphicsContext.setFont(Font.font("System", FontWeight.NORMAL, 20));
+        if (!race.getFinishOrder().isEmpty()) {
+            Car winner = race.getFinishOrder().get(0);
+            graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 20));
+            graphicsContext.fillText(
+                "Winner: Car #" + winner.getCarNumber() + " - " + winner.getDriver().getName(),
+                220,
+                75
+            );
+        }
 
-        int y = 110;
-        int place = 1;
+        graphicsContext.setFont(Font.font("System", FontWeight.NORMAL, 16));
+
+        int y = 115;
 
         for (Car car : race.getFinishOrder()) {
             graphicsContext.fillText(
-                place + ". Car #" + car.getCarNumber()
-                    + "   Time: " + String.format("%.2f", car.getTotalRaceTime()) + "s"
-                    + "   Fastest Lap: " + String.format("%.2f", car.getFastestLapTime()) + "s",
-                120,
+                car.getFinishingPosition() + ". Car #" + car.getCarNumber()
+                    + " - " + car.getDriver().getName(),
+                70,
                 y
             );
-            y += 40;
-            place++;
-        }
-    }
 
+            graphicsContext.fillText(
+                "Path taken: " + formatPath(car.getPathTaken()),
+                90,
+                y + 22
+            );
+
+            graphicsContext.fillText(
+                "Speed: " + String.format("%.2f", car.getSpeed())
+                    + "   Total race time: " + String.format("%.2f", car.getTotalRaceTime()) + "s"
+                    + "   Fastest lap: " + String.format("%.2f", car.getFastestLapTime()) + "s",
+                90,
+                y + 44
+            );
+
+            y += 78;
+        }
+}
+
+       private String formatPath(java.util.List<Integer> pathTaken) {
+            if (pathTaken.isEmpty()) {
+                return "";
+            }
+
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < pathTaken.size(); i++) {
+                builder.append(pathTaken.get(i) + 1);
+
+                if (i < pathTaken.size() - 1) {
+                    builder.append(" -> ");
+                }
+            }
+
+            return builder.toString();
+        }
     //Clears the canvas for the next frame of animation
     private void clearCanvas() {
         graphicsContext.setFill(Color.color(0.1, 0.1,0.1));

@@ -201,6 +201,8 @@ public class Car    {
     public void setFinishingPosition(int finishingPosition) { this.finishingPosition = finishingPosition; }
     public List<Integer> getPathTaken() { return this.pathTaken; }
     public double getFastestLapTime() { return this.fastestLapTime; }
+    public Driver getDriver() { return this.driver; }
+    public double getSpeed() { return this.speed; }
     /*
 
     public Driver getDriver() { return this.driver;}
