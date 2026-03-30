@@ -1,3 +1,11 @@
+//Joey Barton
+
+/*
+Controller class for the Racing UI
+Manages the interaction between the user, the race simulation data,
+and the JavaFX rendering surface.
+*/
+
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -17,6 +25,7 @@ public class RaceController {
 
     @FXML private Canvas canvas;
 
+    //F1 style start lights
     @FXML private Circle LightOne_Circle;
     @FXML private Circle LightTwo_Circle;
     @FXML private Circle LightThree_Circle;
@@ -30,6 +39,7 @@ public class RaceController {
     @FXML private Label P2_Label;
     @FXML private Label P3_Label;
     @FXML private Label P4_Label;
+
 
     /*
         countdownLights goes:
@@ -56,12 +66,16 @@ public class RaceController {
 
     private static final int NUM_CARS = 4;
 
+    private List<String> driverNames = new ArrayList<>();
+
     
     public RaceController() {
         
     }
     
 
+    //Called by JavaFX
+    //Sets up the initial race environment and performs the first render.
     @FXML
     private void initialize() {
         graphicsContext = canvas.getGraphicsContext2D();
@@ -74,12 +88,15 @@ public class RaceController {
         
     }
 
+    //Start button
     @FXML
     private void StartButton_clicked() {
         startLightSequence();
 
     }
-     
+
+    //Reset button
+    //Currently doesn't reset 
     @FXML
     private void ResetButton_clicked() {
 
@@ -88,7 +105,15 @@ public class RaceController {
         }
     }
 
+    //Populates the track with sectors and generates cars.
     private void buildRace() {
+
+        driverNames.clear();
+        driverNames.addAll(List.of("Max Verstappen", "Fernando Alonso", "Sebastian Vettel", "Lando Norris", 
+                                "Lewis Hamilton", "Gabriel Bortoleto", "Charles Leclerc", "Arvid Lindblad", 
+                                "Valtteri Bottas", "Carlos Sainz", "Oscar Piastri", "Isack Hadjar", "Alex Albon",
+                                "Pierre Gasly", "Kimi Antonelli", "Kimi Raikkonen"
+                            ));
 
         sectorList = new ArrayList<>();
         sectorList.add(new Sector(0, "Sector_1", 0, Math.PI / 2));
@@ -103,15 +128,18 @@ public class RaceController {
         cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
-        race = new Race(track, cars);
+        race = new Race(track, cars, 20);
     }
      
-
+    //Handles the visual countdown sequence.
+    //Lights up five circles sequentially, then pauses for a random
+    //interval before turning them off and starting the race.
     public void startLightSequence() {
         Circle[] lights = {LightOne_Circle, LightTwo_Circle, LightThree_Circle, LightFour_Circle, LightFive_Circle};
         Timeline timeline = new Timeline();
         countdownLights = 0;
 
+        //Sequence for turning lights ON
         for(int i = 0; i < lights.length; i++) {
             int lightIndex = i;
             KeyFrame turnOn = new KeyFrame(
@@ -128,6 +156,7 @@ public class RaceController {
         //all lights go out at once. This will randomize the start between 0.2s and 1.7s.
         int randomDelay = rand.nextInt(1500) + 200;
 
+        //KeyFrame for "Lights Out" and Race start
         KeyFrame turnOff = new KeyFrame(
             Duration.millis((LIGHTS_INTERVAL * 5) + randomDelay),
             e -> {
@@ -141,17 +170,17 @@ public class RaceController {
         timeline.play();
     }
 
+    //Transitions the race state to active and starts the game timer.
     private void startRace() {
 
-        for(Car car : race.getCars()) {
-            car.initOnTrack(track);
-        }
+        race.initCarsOnTrack();
 
         Timer timer = new Timer(race, raceView);
         timer.start();
 
     }
 
+    //Resets all start light circles to their off state
     private void resetLights() {
         Circle[] lights = {LightOne_Circle, LightTwo_Circle, LightThree_Circle, LightFour_Circle, LightFive_Circle};
         for(Circle light : lights) {
@@ -159,6 +188,7 @@ public class RaceController {
         }
     }
 
+    //Creates a car with randomized performance component values.
     private Car generateCars(double startAngle, double offset, Color color) {
         Engine engine = new Engine(createRandomPerformanceRating());
         Tire tire = new Tire(createRandomPerformanceRating());
@@ -166,23 +196,31 @@ public class RaceController {
 
         //Example version. 
         //We can have a list of names and numbers to randomly choose from.
-        Driver MaxVerstappen = new Driver("Max", 1);
+        Driver driver = new Driver(getDriverName(), 1);
 
-        return new Car(startAngle, offset, color, engine, tire, aero, rand.nextInt(99) + 1, MaxVerstappen);
+        return new Car(startAngle, offset, color, engine, tire, aero, rand.nextInt(99) + 1, driver);
     }
 
+    //Generates a random rating between 0.60 and 0.80
     private double createRandomPerformanceRating() {
         double rating = rand.nextInt(21) + 60 ;
         return rating / 100;
     }
 
+    //Updates the UI labels
+    //@TODO setup useful information for these
     private void populateUILabels() {
-        P1_Label.setText("Car #" + cars.get(0).getCarNumber());
-        P2_Label.setText("Car #" + cars.get(1).getCarNumber());
-        P3_Label.setText("Car #" + cars.get(2).getCarNumber());
-        P4_Label.setText("Car #" + cars.get(3).getCarNumber());
+        P1_Label.setText(cars.get(0).getDriver().getName() + " | #" + cars.get(0).getCarNumber());
+        P2_Label.setText(cars.get(1).getDriver().getName() + " | #" + cars.get(1).getCarNumber());
+        P3_Label.setText(cars.get(2).getDriver().getName() + " | #" + cars.get(2).getCarNumber());
+        P4_Label.setText(cars.get(3).getDriver().getName() + " | #" + cars.get(3).getCarNumber());
     }
 
+    private String getDriverName() {
+        int selection = rand.nextInt(15);
+        return driverNames.remove(selection);
+        
+    }
     
 
 

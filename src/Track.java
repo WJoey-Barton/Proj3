@@ -1,3 +1,11 @@
+//Joey Barton
+
+/*
+Represents the physical layout of the race track.
+This class holds the constants for the track's geometry and manages
+the collection of segments that define the track.
+*/
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +31,8 @@ public class Track {
         buildSegments();
     }
 
+    //Populates the track with Straights, Corners, and Traction Zones.
+    //Segments are defined using radian ranges
     private void buildSegments() {
         allSegments.add(new Straight(1, ((23 * Math.PI ) / 36), ((13 * Math.PI) / 36))); //Front Straight 115 degrees to 65
         allSegments.add(new Straight(2, ((59 * Math.PI ) / 36), ((49 * Math.PI) / 36))); // Back Straight 295 degrees to 245
@@ -34,6 +44,7 @@ public class Track {
         allSegments.add(new TractionZone(8, ((13 * Math.PI ) / 36), ((Math.PI) / 4))); //Front Straight to Right Corner 65 degrees to 45
     }
 
+    //Determines which segment a car is currently in, based on its angle.
     public TrackSegment getSegmentAtAngle(double angle) {
         for(TrackSegment segment : allSegments) {
             if(segment.containsAngle(angle)) {
@@ -44,6 +55,7 @@ public class Track {
         return allSegments.get(0);
     }
 
+    //Getters
     public List<TrackSegment> getAllSegments() { return this.allSegments;}
     public String getTrackName() { return this.trackName;}
     public List<Sector> getSectorList() { return this.sectorList;}
