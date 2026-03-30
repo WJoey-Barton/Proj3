@@ -26,12 +26,48 @@ public class RaceView {
     }
 
     //Clears the frame and redraws the entire race state.
+    //Added to create results screen as well.
     public void render(Race race) {
         clearCanvas();
+
+        if (race.isRaceFinished()) {
+            drawResults(race);
+            return;
+        }
+
         drawTrack();
 
-        for(Car car : race.getCars()) {
+        for (Car car : race.getCars()) {
             drawCar(car);
+        }
+    }
+
+
+
+
+    private void drawResults(Race race) {
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.fillRect(0, 0, 840, 450);
+
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 28));
+        graphicsContext.fillText("Race Results", 300, 60);
+
+        graphicsContext.setFont(Font.font("System", FontWeight.NORMAL, 20));
+
+        int y = 110;
+        int place = 1;
+
+        for (Car car : race.getFinishOrder()) {
+            graphicsContext.fillText(
+                place + ". Car #" + car.getCarNumber()
+                    + "   Time: " + String.format("%.2f", car.getTotalRaceTime()) + "s"
+                    + "   Fastest Lap: " + String.format("%.2f", car.getFastestLapTime()) + "s",
+                120,
+                y
+            );
+            y += 40;
+            place++;
         }
     }
 

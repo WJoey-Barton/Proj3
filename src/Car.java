@@ -7,14 +7,19 @@ based on mechanical components and track conditions.
 */
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 
-public class Car {
+public class Car    {
 
     //Lives here for now. Definitely should live in Race.
     private static final int TOTAL_LAPS = 20;
-
+    private final List<Integer> pathTaken = new ArrayList<>();
+    private double totalRaceTime = 0.0;
+    private double currentLapTime = 0.0;
+    private double fastestLapTime = Double.MAX_VALUE;
+    private int finishingPosition = 0;
     //Movement and Positioning
     double angle;
     double speed;
@@ -51,7 +56,7 @@ public class Car {
         this.aero = aero;
         this.carNumber = carNum;
         this.driver = driver;
-        
+
         this.startAngle = startAngle;
         this.previousAngle = startAngle;
         this.lapsRemaining = TOTAL_LAPS;
@@ -63,6 +68,7 @@ public class Car {
     public void initOnTrack(Track track) {
         this.currentSegment = track.getSegmentAtAngle(this.angle);
         calculateCarSpeed();
+        this.pathTaken.add(this.currentSectorID);
     }
 
     //Flags this car as being controlled by the user
@@ -97,6 +103,11 @@ public class Car {
         angle -= speed * deltaTime;
         wrapAngle();
 
+        if (!isFinished) {
+            totalRaceTime += deltaTime;
+            currentLapTime += deltaTime;
+        }
+
         //Checks for change in TrackSegment to recalculate speed
         TrackSegment newSegment = track.getSegmentAtAngle(angle);
         if(newSegment.getSegmentID() != currentSegment.getSegmentID()) {
@@ -130,16 +141,17 @@ public class Car {
         this.speed = BASE_SPEED + normalized + (0.5 * normalized);
 
         System.out.println("Base Speed " + BASE_SPEED + " normalized: " + normalized + " Component Rating: " + componentRating);
-        
+
     }
 
     //Checks if the car has entered a new sector.
     public boolean checkSector(List<Sector> sectors) {
-        
-        for(Sector sector : sectors) {
-            if(angle >= sector.getStartAngle() && angle < sector.getEndAngle()) {
-                if(this.currentSectorID != sector.getSectorID()) {
+
+        for (Sector sector : sectors) {
+            if (angle >= sector.getStartAngle() && angle < sector.getEndAngle()) {
+                if (this.currentSectorID != sector.getSectorID()) {
                     this.currentSectorID = sector.getSectorID();
+                    this.pathTaken.add(sector.getSectorID());
                     return true;
                 }
             }
@@ -156,21 +168,26 @@ public class Car {
         boolean crossed;
 
         if(wrapped) {
-            
+
             crossed = startAngle >= previousAngle || startAngle <= angle;
         } else {
             crossed = previousAngle < startAngle && angle >= startAngle;
         }
         if(crossed) {
-            lapsRemaining--;
-            System.out.println("Lap completed. Laps remaining: " + lapsRemaining);
-
-            if(lapsRemaining <= 0) {
-                isFinished = true;
+            if (currentLapTime < fastestLapTime) {
+                fastestLapTime = currentLapTime;
             }
+
+        currentLapTime = 0.0;
+        lapsRemaining--;
+        System.out.println("Lap completed. Laps remaining: " + lapsRemaining);
+
+        if(lapsRemaining <= 0) {
+            isFinished = true;
         }
     }
-     
+        }
+
 
     //Getters
     public Color getColor() { return this.color;}
@@ -178,15 +195,20 @@ public class Car {
     public int getLapsRemaining() { return this.lapsRemaining;}
     public int getCarNumber() { return this.carNumber;}
     public double getAngle() { return this.angle;}
+    public boolean isFinished() { return this.isFinished;}
+    public double getTotalRaceTime() { return this.totalRaceTime; }
+    public int getFinishingPosition() { return this.finishingPosition; }
+    public void setFinishingPosition(int finishingPosition) { this.finishingPosition = finishingPosition; }
+    public List<Integer> getPathTaken() { return this.pathTaken; }
+    public double getFastestLapTime() { return this.fastestLapTime; }
     /*
-    
+
     public Driver getDriver() { return this.driver;}
     public Engine getEngine() { return this.engine;}
     public Tire getTire() { return this.tire;}
     public Aero getAero() { return this.aero;}
     public double getCurrentSpeed() { return this.currentSpeed;}
     public boolean isPlayerCar() { return this.isPlayerCar;}
-    public boolean isFinished() { return this.isFinished;}
     */
 
     @Override
@@ -194,6 +216,4 @@ public class Car {
         //return "" + this.carNumber;
         return "Total Speed: " + speed + " Engine: " + engine.getRating() + " Tire: " + tire.getRating() + " Aero: " + aero.getRating();
     }
-    
-    
 }

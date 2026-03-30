@@ -21,16 +21,43 @@ public class Timer extends AnimationTimer {
         double deltaTime = (now - lastNano) / 1_000_000_000.0;
         lastNano = now;
 
-        for(Car car : race.getCars()) {
-            car.update(deltaTime, race.getTrack());
 
-            // if(car.checkSector(race.getTrack().getSectorList())) {
-            //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
-            // }
+      for (Car car : race.getCars()) {
+    boolean wasFinished = car.isFinished();
+
+    car.update(deltaTime, race.getTrack());
+
+    if (!wasFinished && car.isFinished()) {
+        race.recordFinish(car);
+    }
+
+    car.checkSector(race.getTrack().getSectorList());
+
+    }
+
+    // if(car.checkSector(race.getTrack().getSectorList())) {
+    //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
+    // }
+
+
+    raceView.render(race);
+
+    if (race.isRaceFinished()) {
+        stop();
+    }
+
+}
+}
+       // for(Car car : race.getCars()) {
+          //  car.update(deltaTime);
+
+          //  if(car.checkSector(race.getTrack().getSectorList())) {
+           //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
+         //   }
 
             //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
-        }
+       // }
 
-        raceView.render(race);
-    }
-}
+    //    raceView.render(race);
+ //   }
+//}
