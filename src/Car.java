@@ -18,6 +18,7 @@ public class Car    {
     private double currentLapTime = 0.0;
     private double fastestLapTime = Double.MAX_VALUE;
     private int finishingPosition = 0;
+    private int totalLaps;
     //Movement and Positioning
     double angle;
     double speed;
@@ -66,13 +67,13 @@ public class Car    {
 
     //Initializes the car's starting segment and calculates initial speed.
     //Also sets the number of laps for each car, set by Race
-    public void initOnTrack(Track track, int totalLaps) {
+        public void initOnTrack(Track track, int totalLaps) {
+        this.totalLaps = totalLaps;
         this.lapsRemaining = totalLaps;
         this.currentSegment = track.getSegmentAtAngle(this.angle);
         calculateCarSpeed();
         this.pathTaken.add(this.currentSectorID);
     }
-
     //Flags this car as being controlled by the user
     public void setPlayer() {
         this.isPlayable = true;
@@ -205,6 +206,21 @@ public class Car    {
     public double getFastestLapTime() { return this.fastestLapTime; }
     public Driver getDriver() { return this.driver; }
     public double getSpeed() { return this.speed; }
+    public double getLapDistance() {
+        double a = Track.RX + laneOffset;
+        double b = Track.RY + laneOffset;
+
+        return Math.PI * (3 * (a + b) - Math.sqrt((3 * a + b) * (a + 3 * b)));
+    }
+
+    public double getAverageSpeed() {
+        if (totalRaceTime <= 0) {
+            return 0;
+        }
+
+        double totalDistance = totalLaps * getLapDistance();
+        return totalDistance / totalRaceTime;
+    }
     /*
 
     public Driver getDriver() { return this.driver;}

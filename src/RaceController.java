@@ -99,10 +99,12 @@ public class RaceController {
     //Currently doesn't reset 
     @FXML
     private void ResetButton_clicked() {
+        resetLights();
+        buildRace();
+        populateUILabels();
 
-        for(Car car : cars) {
-            System.out.println(car.toString());
-        }
+        raceView = new RaceView(graphicsContext);
+        raceView.render(race);
     }
 
     //Populates the track with sectors and generates cars.
@@ -128,7 +130,7 @@ public class RaceController {
         cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
-        race = new Race(track, cars, 20);
+        race = new Race(track, cars, 10);
     }
      
     //Handles the visual countdown sequence.
@@ -217,7 +219,7 @@ public class RaceController {
     }
 
     private String getDriverName() {
-        int selection = rand.nextInt(15);
+        int selection = rand.nextInt(12);
         return driverNames.remove(selection);
         
     }
