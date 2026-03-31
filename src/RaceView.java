@@ -47,16 +47,22 @@ public class RaceView {
 
 
     private void drawResults(Race race) {
-        graphicsContext.setFill(Color.WHITE);
-        graphicsContext.fillRect(0, 0, 840, 450);
+        graphicsContext.setFill(Color.web("#0d0d12"));
+        graphicsContext.fillRect(0, 0, 840, 594);
 
-        graphicsContext.setFill(Color.BLACK);
-        graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 28));
+        graphicsContext.setFill(Color.web("#ff073a"));
+        graphicsContext.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
         graphicsContext.fillText("Race Results", 300, 40);
 
         if (!race.getFinishOrder().isEmpty()) {
             Car winner = race.getFinishOrder().get(0);
-            graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 20));
+
+            graphicsContext.setFill(Color.web("#171721"));
+            graphicsContext.setStroke(Color.web("#2a2a3b"));
+            graphicsContext.setLineWidth(1);
+
+            graphicsContext.setFill(Color.web("#e0e0e0"));
+            graphicsContext.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
             graphicsContext.fillText(
                     "Winner: Car #" + winner.getCarNumber() + " - " + winner.getDriver().getName(),
                     220,
@@ -67,6 +73,12 @@ public class RaceView {
         int y = 115;
 
         for (Car car : race.getFinishOrder()) {
+
+            graphicsContext.setFill(Color.web("#171721"));
+            graphicsContext.setStroke(Color.web("#2a2a3b"));
+            graphicsContext.setLineWidth(1);
+
+            graphicsContext.setFill(Color.web("#ff073a"));
             graphicsContext.setFont(Font.font("System", FontWeight.BOLD, 16));
             graphicsContext.fillText(
                     car.getFinishingPosition() + ". Car #" + car.getCarNumber()
@@ -75,6 +87,8 @@ public class RaceView {
                     y
             );
 
+            graphicsContext.setStroke(Color.web("#2a2a3b"));
+            graphicsContext.setLineWidth(1);
             graphicsContext.setFont(Font.font("System", FontWeight.NORMAL, 11));
 
             int pathLines = drawWrappedText(
@@ -85,6 +99,7 @@ public class RaceView {
                     14
             );
 
+            graphicsContext.setFill(Color.web("#a3a3c2"));
             graphicsContext.setFont(Font.font("System", FontWeight.NORMAL, 14));
 
             double infoY = y + 22 + pathLines * 18;
@@ -160,7 +175,7 @@ public class RaceView {
     //Clears the canvas for the next frame of animation
     private void clearCanvas() {
         graphicsContext.setFill(Color.color(0.1, 0.1,0.1));
-        graphicsContext.clearRect(0, 0, 640, 480);
+        graphicsContext.clearRect(0, 0, 640, 594);
 
     }
 
@@ -170,7 +185,7 @@ public class RaceView {
         double totalOuter = TRACK_WIDTH + CURB_WIDTH + GRASS_WIDTH;
 
         //Outside Grass
-        drawOvalBand(Track.RX + totalOuter, Track.RY + totalOuter, Color.FORESTGREEN);
+        drawOvalBand(Track.RX + totalOuter, Track.RY + totalOuter, Color.web("#0f4c5c"));
 
         //Orange Outside Curb
         drawOvalBand(Track.RX + TRACK_WIDTH + CURB_WIDTH, Track.RY + TRACK_WIDTH + CURB_WIDTH, Color.DARKORANGE);
@@ -182,7 +197,7 @@ public class RaceView {
         drawOvalBand(Track.RX + CURB_WIDTH, Track.RY + CURB_WIDTH, Color.DARKORANGE);
         
         //Inside Grass
-        drawOvalBand(Track.RX, Track.RY, Color.FORESTGREEN);
+        drawOvalBand(Track.RX, Track.RY, Color.web("#0f4c5c"));
     }
 
     //Helper method to draw a filled oval centered on the track's center.

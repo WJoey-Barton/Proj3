@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="874.0" stylesheets="@dark-mode.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RaceController">
    <children>
       <Canvas fx:id="canvas" height="594.0" layoutX="20.0" layoutY="64.0" width="640.0" />
       <Label layoutX="277.0" layoutY="14.0" text="Racing Game Prototype" />
-      <Button fx:id="Start_Button" layoutX="752.0" layoutY="624.0" mnemonicParsing="false" onAction="#StartButton_clicked" text="Start" />
-      <Button fx:id="Reset_Button" layoutX="814.0" layoutY="624.0" mnemonicParsing="false" onAction="#ResetButton_clicked" text="Reset" />
+      <Button fx:id="Start_Button" layoutX="711.0" layoutY="623.0" mnemonicParsing="false" onAction="#StartButton_clicked" text="Start" />
+      <Button fx:id="Reset_Button" layoutX="773.0" layoutY="623.0" mnemonicParsing="false" onAction="#ResetButton_clicked" text="Reset" />
       <Circle fx:id="LightOne_Circle" fill="#ff0606" layoutX="284.0" layoutY="43.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="LightTwo_Circle" fill="#ff0606" layoutX="312.0" layoutY="43.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="LightThree_Circle" fill="#ff0606" layoutX="340.0" layoutY="43.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />

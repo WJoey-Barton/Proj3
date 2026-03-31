@@ -141,7 +141,7 @@ public class Car    {
         //double average = ((engine.getRating() + tire.getRating() + aero.getRating()) / 3);
 
         double normalized = (componentRating - PerformanceComponent.MIN_RATING) / (PerformanceComponent.MAX_RATING - PerformanceComponent.MIN_RATING);
-        this.speed = BASE_SPEED + normalized + (0.5 * normalized);
+        this.speed = BASE_SPEED + normalized + (6.75 * normalized);
 
         System.out.println("Base Speed " + BASE_SPEED + " normalized: " + normalized + " Component Rating: " + componentRating);
 

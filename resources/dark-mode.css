@@ -1,0 +1,48 @@
+.root {
+    -fx-background-color: #0d0d12;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+}
+
+.label {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff073a;
+    -fx-border-color: #ff073a;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 7, 58, 0.4), 12, 0, 0, 0);
+}
+
+.vbox {
+    -fx-background-color: #171721;
+    -fx-border-color: #2a2a3b;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 15,0,0,8);
+}
+
+#P1_Label, #P2_Label,#P3_Label,#P4_Label {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-text-fill: #a3a3c2;
+    -fx-padding: 8px 5px;
+    -fx-border-color: transparent transparent #2a2a3b transparent;
+    -fx-border-width: 1px;
+}
+
+#LapCounter_Label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff073a; 
+}

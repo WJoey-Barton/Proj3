@@ -9,7 +9,7 @@ to provide a rating used in the simulation's speed physics calculations.
 public interface PerformanceComponent {
 
     //Minimum possible rating a component can have
-    double MIN_RATING = 5.3;
+    double MIN_RATING = 3.0;
 
     //Maximum possible rating a component can have
     double MAX_RATING = 8.0;
