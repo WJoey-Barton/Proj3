@@ -1,4 +1,4 @@
-//Joey Barton
+//Joey Barton & Cesar Pimentel
 
 /*
 The Car class represents an individual vehicle within the simulation.
@@ -200,6 +200,7 @@ public class Car    {
     public double getAngle() { return this.angle;}
     public boolean isFinished() { return this.isFinished;}
     public double getTotalRaceTime() { return this.totalRaceTime; }
+    public int getTotalLaps() { return this.totalLaps; }
     public int getFinishingPosition() { return this.finishingPosition; }
     public void setFinishingPosition(int finishingPosition) { this.finishingPosition = finishingPosition; }
     public List<Integer> getPathTaken() { return this.pathTaken; }
@@ -221,15 +222,6 @@ public class Car    {
         double totalDistance = totalLaps * getLapDistance();
         return totalDistance / totalRaceTime;
     }
-    /*
-
-    public Driver getDriver() { return this.driver;}
-    public Engine getEngine() { return this.engine;}
-    public Tire getTire() { return this.tire;}
-    public Aero getAero() { return this.aero;}
-    public double getCurrentSpeed() { return this.currentSpeed;}
-    public boolean isPlayerCar() { return this.isPlayerCar;}
-    */
 
     @Override
     public String toString() {
