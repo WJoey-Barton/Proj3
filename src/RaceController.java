@@ -1,4 +1,6 @@
-//Joey Barton & Cesar Pimentel
+// Joey Barton
+// Cesar Pimentel
+// David Hagbi
 
 /*
 Controller class for the Racing UI

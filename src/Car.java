@@ -1,4 +1,6 @@
-//Joey Barton & Cesar Pimentel
+// Joey Barton
+// Cesar Pimentel
+// David Hagbi
 
 /*
 The Car class represents an individual vehicle within the simulation.

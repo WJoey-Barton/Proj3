@@ -1,4 +1,5 @@
 // Cesar Pimentel
+// David Hagbi
 
 import javafx.animation.AnimationTimer;
 

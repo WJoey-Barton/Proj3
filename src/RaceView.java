@@ -1,4 +1,5 @@
 //Joey Barton
+//David Hagbi
 
 /*
 Handles all visual rendering for the race simulation.
