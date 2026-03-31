@@ -131,7 +131,7 @@ public class RaceController {
         cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
 
         track = new Track("Oval", sectorList);
-        race = new Race(track, cars, 2);
+        race = new Race(track, cars, 10);
     }
      
     //Handles the visual countdown sequence.
