@@ -1,3 +1,5 @@
+// Cesar Pimentel
+
 import javafx.animation.AnimationTimer;
 
 public class Timer extends AnimationTimer {
@@ -5,15 +7,17 @@ public class Timer extends AnimationTimer {
     long lastNano = 0;
     Race race;
     RaceView raceView;
+    RaceController raceController;
 
-    public Timer(Race race, RaceView raceView) {
+    public Timer(Race race, RaceView raceView, RaceController raceController) {
         this.race = race;
         this.raceView = raceView;
+        this.raceController = raceController;
     }
 
     @Override
     public void handle(long now) {
-        if(lastNano == 0) {
+        if (lastNano == 0) {
             lastNano = now;
             return;
         }
@@ -21,43 +25,23 @@ public class Timer extends AnimationTimer {
         double deltaTime = (now - lastNano) / 1_000_000_000.0;
         lastNano = now;
 
+        for (Car car : race.getCars()) {
+            boolean wasFinished = car.isFinished();
 
-      for (Car car : race.getCars()) {
-    boolean wasFinished = car.isFinished();
+            car.update(deltaTime, race.getTrack());
 
-    car.update(deltaTime, race.getTrack());
+            if (!wasFinished && car.isFinished()) {
+                race.recordFinish(car);
+            }
 
-    if (!wasFinished && car.isFinished()) {
-        race.recordFinish(car);
+            car.checkSector(race.getTrack().getSectorList());
+        }
+        raceController.updateUILabels();
+
+        raceView.render(race);
+
+        if (race.isRaceFinished()) {
+            stop();
+        }
     }
-
-    car.checkSector(race.getTrack().getSectorList());
-
-    }
-
-    // if(car.checkSector(race.getTrack().getSectorList())) {
-    //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
-    // }
-
-
-    raceView.render(race);
-
-    if (race.isRaceFinished()) {
-        stop();
-    }
-
 }
-}
-       // for(Car car : race.getCars()) {
-          //  car.update(deltaTime);
-
-          //  if(car.checkSector(race.getTrack().getSectorList())) {
-           //     System.out.println("Car " + car + " entered Sector " + car.getCurrentSectorID());
-         //   }
-
-            //System.out.println("Car on X: "+ car.getX() + "\nCar on Y: " + car.getY());
-       // }
-
-    //    raceView.render(race);
- //   }
-//}
