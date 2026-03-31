@@ -40,6 +40,7 @@ public class RaceController {
     @FXML private Label P3_Label;
     @FXML private Label P4_Label;
 
+    @FXML private Label LapCounter_Label;
 
     /*
         countdownLights goes:
@@ -222,20 +223,18 @@ public class RaceController {
     // Called every frame by Timer to keep race labels in sync with current car state
     protected void updateUILabels() {
         P1_Label.setText(cars.get(0).getDriver().getName() + " | #" + cars.get(0).getCarNumber()
-                + "\nLap: " + (cars.get(0).getTotalLaps() - cars.get(0).getLapsRemaining()) + "/" + cars.get(0).getTotalLaps()
                 + "\nTime: " + String.format("%.1f", cars.get(0).getTotalRaceTime()) + "s");
 
         P2_Label.setText(cars.get(1).getDriver().getName() + " | #" + cars.get(1).getCarNumber()
-                + "\nLap: " + (cars.get(1).getTotalLaps() - cars.get(1).getLapsRemaining()) + "/" + cars.get(1).getTotalLaps()
                 + "\nTime: " + String.format("%.1f", cars.get(1).getTotalRaceTime()) + "s");
 
         P3_Label.setText(cars.get(2).getDriver().getName() + " | #" + cars.get(2).getCarNumber()
-                + "\nLap: " + (cars.get(2).getTotalLaps() - cars.get(2).getLapsRemaining()) + "/" + cars.get(2).getTotalLaps()
                 + "\nTime: " + String.format("%.1f", cars.get(2).getTotalRaceTime()) + "s");
 
         P4_Label.setText(cars.get(3).getDriver().getName() + " | #" + cars.get(3).getCarNumber()
-                + "\nLap: " + (cars.get(3).getTotalLaps() - cars.get(3).getLapsRemaining()) + "/" + cars.get(3).getTotalLaps()
                 + "\nTime: " + String.format("%.1f", cars.get(3).getTotalRaceTime()) + "s");
+
+        LapCounter_Label.setText("Lap: " + (cars.get(3).getTotalLaps() - cars.get(3).getLapsRemaining()) + "/"+ cars.get(1).getTotalLaps());
     }
 
     private String getDriverName() {
