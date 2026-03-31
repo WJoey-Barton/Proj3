@@ -126,9 +126,9 @@ public class RaceController {
 
         cars = new ArrayList<>();
         cars.add(generateCars(sectorList.get(0).getStartAngle(), 15, Color.YELLOW));
-        cars.add(generateCars(sectorList.get(1).getStartAngle(), 20, Color.BLUE));
-        cars.add(generateCars(sectorList.get(2).getStartAngle(), 30, Color.RED));
-        cars.add(generateCars(sectorList.get(3).getStartAngle(), 20, Color.SILVER));
+        cars.add(generateCars(sectorList.get(0).getStartAngle(), 25, Color.BLUE));
+        cars.add(generateCars(sectorList.get(0).getStartAngle(), 45, Color.RED));
+        cars.add(generateCars(sectorList.get(0).getStartAngle(), 35, Color.SILVER));
 
         track = new Track("Oval", sectorList);
         race = new Race(track, cars, 10);
